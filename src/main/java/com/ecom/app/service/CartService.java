@@ -66,22 +66,15 @@ public class CartService {
         return false;
     }
 
-    public List<CartItemsResponse> fetchItems(String userId) {
-        Optional<User> userOpt = userRepository.findById(Long.valueOf(userId));
-        if(userOpt.isPresent()){
-            User user = userOpt.get();
-            return cartItemRepository.findByUser(user).stream()
-                    .map(this::mapToCartItemsResponse)
-                    .collect(Collectors.toList());
-        }
-        return null;
+
+
+    public List<CartItem> getCart(String userId) {
+        return userRepository.findById(Long.valueOf(userId))
+                .map(cartItemRepository::findByUser)
+                .orElseGet(List::of);
     }
 
-    public CartItemsResponse mapToCartItemsResponse(CartItem item){
-        CartItemsResponse cartItemsResponse = new CartItemsResponse();
-        cartItemsResponse.setProduct(item.getProduct());
-        cartItemsResponse.setQuantity(item.getQuantity());
-        cartItemsResponse.setPrice(item.getPrice());
-        return cartItemsResponse;
+    public void clearCart(String userId) {
+        userRepository.findById(Long.valueOf(userId)).ifPresent(cartItemRepository::deleteByUser);
     }
 }

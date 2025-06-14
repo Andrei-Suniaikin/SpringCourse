@@ -2,6 +2,7 @@ package com.ecom.app.controller;
 
 import com.ecom.app.dto.CartItemRequest;
 import com.ecom.app.dto.CartItemsResponse;
+import com.ecom.app.model.CartItem;
 import com.ecom.app.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,8 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CartItemsResponse>> getCartItems(@RequestHeader("X-User-ID") String userId){
-        return ResponseEntity.ok(cartService.fetchItems(userId));
+    public ResponseEntity<List<CartItem>> getCart(@RequestHeader("X-User-ID") String userId){
+        return ResponseEntity.ok(cartService.getCart(userId));
     }
 
     }
